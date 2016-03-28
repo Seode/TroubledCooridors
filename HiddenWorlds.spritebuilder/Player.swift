@@ -13,7 +13,4 @@ class Player: CCSprite {
     func didLoadFromCCB() {
         //println("Player created!")
     }
-    override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
-        <#code#>
-    }
 }
