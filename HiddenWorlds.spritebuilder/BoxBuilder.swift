@@ -28,16 +28,16 @@ extension Int
     }
 }
 class WorldGen {
-    var level : Int = 27
+    var level : Int = 20
     /*
-    var column : Int = level+10 //10 is the border size, 5 on each side
-    var rows : Int = level+10 //same as column
+    var columns : Int = level+10 //10 is the border size, 5 on each side
+    var rows : Int = level+10 //same as columns
     var horizontal = Int(((level%10)/5)+level/10) //alterations horizontal lines
     var vertical = Int(((level%10)/7)+level/10) //vertical lines
     var corner = Int(level/10) //corner
     var square = Int(level/15) //square
-    var someInts = [Int](count:rows*column, repeatedValue:0) */
-    var column : Int = 0
+    var someInts = [Int](count:rows*columns, repeatedValue:0) */
+    var columns : Int = 0
     var rows : Int = 0
     var horizontal = 0
     var vertical = 0
@@ -69,7 +69,7 @@ class WorldGen {
     {
         for i in 0...rows-1
         {
-            for j in 0...column-1
+            for j in 0...columns-1
             {
                 blocks.blockList.append(Block(rowNum: i, columnNum: j, imageType: 0))
             }
@@ -83,12 +83,12 @@ class WorldGen {
         //creating the border
         for i in 0...rows-1
         {
-            for j in 0...column-1
+            for j in 0...columns-1
             {
-                if i <= 4 || i >= rows-5 || j <= 4 || j >= column-5 //if it fits one of the cases, make 1
+                if i <= 4 || i >= rows-5 || j <= 4 || j >= columns-5 //if it fits one of the cases, make 1
                 {
-                    someInts[i*column + j] = 1 // i is the row the changed number is in. j is the column number the changed number is in.
-                    blocks.blockList[i*column + j].imageType = 1
+                    someInts[i*columns + j] = 1 // i is the row the changed number is in. j is the columns number the changed number is in.
+                    blocks.blockList[i*columns + j].imageType = 1
                 }
             }
         }
@@ -97,20 +97,20 @@ class WorldGen {
         for var h = 0; h < horizontal; h++
         { //horizontal
             let rowChosen = Int.random(0...level-1) //choose row within playable area
-            for var j = 0; j < column; j++ //make line
+            for var j = 0; j < columns; j++ //make line
             {
-                someInts[(rowChosen+5)*column + j] = 1 //each j is in the next column (right 1)
-                blocks.blockList[(rowChosen+5)*column + j].imageType = 1
+                someInts[(rowChosen+5)*columns + j] = 1 //each j is in the next columns (right 1)
+                blocks.blockList[(rowChosen+5)*columns + j].imageType = 1
             }
         }
 
         for var v = 0; v < vertical; v++
         { //vertical
-            let columnChosen = Int.random(0...level-1) //choose column within playable area
+            let columnsChosen = Int.random(0...level-1) //choose columns within playable area
             for var i = 0; i < rows; i++ //make line
             {
-                someInts[i*column+(columnChosen+5)] = 1 //each i is the next row (down 1)
-                blocks.blockList[i*column + (columnChosen+5)].imageType = 1
+                someInts[i*columns+(columnsChosen+5)] = 1 //each i is the next row (down 1)
+                blocks.blockList[i*columns + (columnsChosen+5)].imageType = 1
             }
         }
         
@@ -121,14 +121,14 @@ class WorldGen {
             let xPosition = Int.random(0...level-1)
             let yPosition = Int.random(0...level-1)
             for var j = 0; j <= xPosition; j++
-            {//r is x position. goes from 0 to xposition or column to column-xposition
-                someInts[abs(((level+4)*topOrBottom)-yPosition)*column + abs(((level+4)*leftOrRight)-j)] = 1 //level+3 makes the numbers start at bottom of the playable area and go up (n,n-1,n-2...) *column makes number chosen be on next row
-                blocks.blockList[abs(((level+4)*topOrBottom)-yPosition)*column + abs(((level+4)*leftOrRight)-j)].imageType = 1
+            {//r is x position. goes from 0 to xposition or columns to columns-xposition
+                someInts[abs(((level+4)*topOrBottom)-yPosition)*columns + abs(((level+4)*leftOrRight)-j)] = 1 //level+3 makes the numbers start at bottom of the playable area and go up (n,n-1,n-2...) *columns makes number chosen be on next row
+                blocks.blockList[abs(((level+4)*topOrBottom)-yPosition)*columns + abs(((level+4)*leftOrRight)-j)].imageType = 1
             }
             for var i = 0; i <= yPosition; i++
             {
-                someInts[abs(((level+4)*topOrBottom)-i)*column + abs(((level+4)*leftOrRight)-xPosition)] = 1  //same as r but for y position
-                blocks.blockList[abs(((level+4)*topOrBottom)-i)*column + abs(((level+4)*leftOrRight)-xPosition)].imageType = 1
+                someInts[abs(((level+4)*topOrBottom)-i)*columns + abs(((level+4)*leftOrRight)-xPosition)] = 1  //same as r but for y position
+                blocks.blockList[abs(((level+4)*topOrBottom)-i)*columns + abs(((level+4)*leftOrRight)-xPosition)].imageType = 1
             }
         }
         
@@ -142,8 +142,8 @@ class WorldGen {
             {
                 for var j = xPosition; j < (xPosition+width); j++
                 {
-                    someInts[(i+5)*column + (j+5)] = 1
-                    blocks.blockList[(i+5)*column + (j+5)].imageType = 1
+                    someInts[(i+5)*columns + (j+5)] = 1
+                    blocks.blockList[(i+5)*columns + (j+5)].imageType = 1
                 }
             }
         }
@@ -153,20 +153,20 @@ class WorldGen {
             var side = Int.random(0...3) //0 is left, 1 is up, 2 is right, 3 is down
             var position = Int.random(0...level-1)
             if side == 0 {
-                someInts[(position+4)*column + 4] = 2
-                blocks.blockList[(position+5)*column + 4].imageType = 2
+                someInts[(position+4)*columns + 4] = 2
+                blocks.blockList[(position+5)*columns + 4].imageType = 2
             }
             if side == 1 {
-                someInts[4*column + position+4] = 2
-                blocks.blockList[4*column + position+4].imageType = 2
+                someInts[4*columns + position+4] = 2
+                blocks.blockList[4*columns + position+4].imageType = 2
             }
             if side == 2 {
-                someInts[(position+4)*column + level+5] = 2
-                blocks.blockList[(position+4)*column + level+5].imageType = 2
+                someInts[(position+4)*columns + level+5] = 2
+                blocks.blockList[(position+4)*columns + level+5].imageType = 2
             }
             if side == 3 {
-                someInts[(level+5)*column + position+4] = 2
-                blocks.blockList[(level+5)*column + position+4].imageType = 2
+                someInts[(level+5)*columns + position+4] = 2
+                blocks.blockList[(level+5)*columns + position+4].imageType = 2
             }
         }
         
@@ -175,20 +175,20 @@ class WorldGen {
             var side = Int.random(0...3) //0 is left, 1 is up, 2 is right, 3 is down
             var position = Int.random(0...level-1)
             if side == 0 {
-                someInts[(position+4)*column + 4] = 2
-                blocks.blockList[(position+5)*column + 4].imageType = 2
+                someInts[(position+4)*columns + 4] = 2
+                blocks.blockList[(position+5)*columns + 4].imageType = 2
             }
             if side == 1 {
-                someInts[4*column + position+4] = 2
-                blocks.blockList[4*column + position+4].imageType = 2
+                someInts[4*columns + position+4] = 2
+                blocks.blockList[4*columns + position+4].imageType = 2
             }
             if side == 2 {
-                someInts[(position+4)*column + level+5] = 2
-                blocks.blockList[(position+4)*column + level+5].imageType = 2
+                someInts[(position+4)*columns + level+5] = 2
+                blocks.blockList[(position+4)*columns + level+5].imageType = 2
             }
             if side == 3 {
-                someInts[(level+5)*column + position+4] = 2
-                blocks.blockList[(level+5)*column + position+4].imageType = 2
+                someInts[(level+5)*columns + position+4] = 2
+                blocks.blockList[(level+5)*columns + position+4].imageType = 2
             }
         }
 
@@ -196,10 +196,10 @@ class WorldGen {
         //generating floor
         for i in 0...rows-1
         {
-            for j in 0...column-1
+            for j in 0...columns-1
             {
-                //print("\(someInts[i*column+j]) ")
-                print("\(blocks.blockList[i*column+j].imageType) ")
+                //print("\(someInts[i*columns+j]) ")
+                print("\(blocks.blockList[(rows-1-i)*columns+j].imageType) ")
             }
             println()
         }
