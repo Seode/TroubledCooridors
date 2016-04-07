@@ -173,10 +173,10 @@ class MainScene: CCNode {
         var blockTwoFiller = (Int(higherRow) * levelGen.rows) + Int(lowerColumn)
         var blockThreeFiller = (Int(higherRow) * levelGen.rows) + Int(higherColumn)
         var blockFourFiller = (Int(lowerRow) * levelGen.rows) + Int(higherColumn)
-        println("blockOneWall: \(blockOneFiller)")
-        println("blockTwoWall: \(blockTwoFiller)")
-        println("blockThreeWall: \(blockThreeFiller)")
-        println("blockFourWall: \(blockFourFiller)")
+        /*println("BlockOne: Column - \(lowerColumn) Row - \(lowerRow)")
+        println("BlockTwo: Column - \(lowerColumn) Row - \(higherRow)")
+        println("BlockThree: Column - \(higherColumn) Row - \(higherRow)")
+        println("BlockFour: Column - \(higherColumn) Row - \(lowerRow)")*/
         if levelGen.blocks.blockList[blockOneFiller].imageType == 1 {
             blockOneWall = 1
         }
@@ -184,12 +184,17 @@ class MainScene: CCNode {
             blockTwoWall = 1
         }
         if levelGen.blocks.blockList[blockThreeFiller].imageType == 1 {
-            blockTwoWall = 1
+            blockThreeWall = 1
         }
         if levelGen.blocks.blockList[blockFourFiller].imageType == 1 {
-            blockTwoWall = 1
+            blockFourWall = 1
         }
         var wallSum = blockOneWall + blockTwoWall + blockThreeWall + blockFourWall
+        println("wallSum: \(wallSum)")
+        println("blockOneWall: \(blockOneWall)")
+        println("blockTwoWall: \(blockTwoWall)")
+        println("blockThreeWall: \(blockThreeWall)")
+        println("blockFourWall: \(blockFourWall)")
         if wallSum == 1 {
             if blockOneWall == 1 {
                 if (1 - columnError) < (1 - rowError) {
