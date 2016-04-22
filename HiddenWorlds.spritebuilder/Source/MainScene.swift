@@ -80,8 +80,10 @@ class MainScene: CCNode {
     
     override func touchBegan(touch : CCTouch, withEvent: CCTouchEvent) {
         var location = touch.locationInNode(camera)
+        /*
+        Outputs:
         println("Touch - X: \(location.x) Y: \(location.y)")
-        println("Player - X: \(hero.position.x) Y: \(hero.position.y)")
+        println("Player - X: \(hero.position.x) Y: \(hero.position.y)")*/
         var xDifference = location.x - hero.position.x
         var yDifference = location.y - hero.position.y
         var xDirection : CGFloat = 0
@@ -107,8 +109,10 @@ class MainScene: CCNode {
     
     override func touchMoved(touch : CCTouch, withEvent: CCTouchEvent) {
         var location = touch.locationInNode(camera)
+        /*
+        Outputs:
         println("Touch - X: \(location.x) Y: \(location.y)")
-        println("Player - X: \(hero.position.x) Y: \(hero.position.y)")
+        println("Player - X: \(hero.position.x) Y: \(hero.position.y)")*/
         var xDifference = location.x - hero.position.x
         var yDifference = location.y - hero.position.y
         var xDirection : CGFloat = 0
@@ -132,7 +136,9 @@ class MainScene: CCNode {
     }
     
     override func touchEnded(touch : CCTouch, withEvent: CCTouchEvent) {
-        println("Touch Ended")
+        /*
+        Output:
+        println("Touch Ended")*/
         xMovement = 0
         yMovement = 0
         moveSwitch = 0
@@ -154,8 +160,10 @@ class MainScene: CCNode {
                 if levelGen.blocks.blockList[(row * levelGen.rows) + column].imageType == 0 {
                     currentBlock = levelGen.blocks.blockList[(row * levelGen.rows) + column]
                     hero.position = ccp(CGFloat(currentBlock.columnNum * 16), CGFloat(currentBlock.rowNum * 16))
+                    /*
+                    Output:
                     println("Spawn Column: \(currentBlock.columnNum)")
-                    println("Spawn Row: \(currentBlock.rowNum)")
+                    println("Spawn Row: \(currentBlock.rowNum)")*/
                     break;
                 }
             }
@@ -238,11 +246,13 @@ class MainScene: CCNode {
         }
         //wallSum checks which collision function to use
         var wallSum = blockOneWall + blockTwoWall + blockThreeWall + blockFourWall
+        /*
+        Output:
         println("wallSum: \(wallSum)")
         println("blockOneWall: \(blockOneWall)")
         println("blockTwoWall: \(blockTwoWall)")
         println("blockThreeWall: \(blockThreeWall)")
-        println("blockFourWall: \(blockFourWall)")
+        println("blockFourWall: \(blockFourWall)")*/
         if wallSum == 1 {
             //finds wall
             if blockOneWall == 1 {
@@ -313,8 +323,10 @@ class MainScene: CCNode {
                 hero.position.y = lowerRow * 16
             }
         }
+        /*
+        Output:
         println("Column: \(columnLocation)")
-        println("Row: \(rowLocation)")
+        println("Row: \(rowLocation)")*/
     }
     
     func checkExit() {

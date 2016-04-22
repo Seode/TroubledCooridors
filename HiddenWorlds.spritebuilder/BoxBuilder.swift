@@ -75,11 +75,14 @@ class WorldGen {
             }
         }
         
+        generateBorder(5)
+        generatePillars(10, ySpacing: 6, minRadius: 1, maxRadius: 3, buildChance: 80)
+        
         for items in 0...(level+10)*(level+10)
         {
             someInts.append(0)
         }
-            
+        /*
         //creating the border
         for i in 0...rows-1
         {
@@ -92,7 +95,7 @@ class WorldGen {
                 }
             }
         }
-        /*
+        
         //creating alterations
         for var h = 0; h < horizontal; h++
         { //horizontal
@@ -225,6 +228,33 @@ class WorldGen {
                 tileRadius = sqrt(Double((currentTile.rowNum * currentTile.rowNum) + (currentTile.columnNum * currentTile.columnNum)))
                 if tileRadius < radius {
                     blocks.blockList[(i*columns)+j].imageType = toImage
+                }
+            }
+        }
+    }
+    
+    func generateBorder(size: Int) {
+        fillArea(0, startColumn: 0, endRow: size-1, endColumn: columns-1, toImage: 1)
+        fillArea(size, startColumn: columns-size, endRow: rows-1, endColumn: columns-1, toImage: 1)
+        fillArea(rows-size, startColumn: 0, endRow: rows-1, endColumn: columns-size, toImage: 1)
+        fillArea(size, startColumn: 0, endRow: rows-size, endColumn: size-1, toImage: 1)
+    }
+    
+    func generatePillars(xSpacing: Int, ySpacing: Int, minRadius: Int, maxRadius: Int, buildChance: UInt32) {
+        //buildChance is the percentage of a pillar to spawn
+        //xSpacing and ySpacing is the distance between each pillar
+        //minRadius and maxRadius are the ranges of pillar size
+        var xPillars = Int(columns/xSpacing)
+        var yPillars = Int(rows/ySpacing)
+        var radiusDifference = maxRadius - minRadius
+        var currentRadius = 0
+        var spawnChance = arc4random_uniform(100)
+        for row in 1...yPillars-1 {
+            for column in 1...xPillars-1 {
+                spawnChance = arc4random_uniform(100)
+                currentRadius = Int(arc4random_uniform(UInt32(radiusDifference))) + minRadius
+                if spawnChance < buildChance {
+                    fillArea((row*ySpacing)-currentRadius, startColumn: (column*xSpacing)-currentRadius, endRow: (row*ySpacing)+currentRadius, endColumn: (column*xSpacing)+currentRadius, toImage: 1)
                 }
             }
         }
