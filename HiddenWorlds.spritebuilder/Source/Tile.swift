@@ -10,6 +10,9 @@ import UIKit
 
 class Tile: CCSprite {
     func didLoadFromCCB() {
+        var room : Int = 0
+        var rowLocation : Int = 0
+        var columnLocation : Int = 0
         //println("Tile created!")
     }
 }

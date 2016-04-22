@@ -28,7 +28,7 @@ extension Int
     }
 }
 class WorldGen {
-    var level : Int = 20
+    var level : Int = 50
     /*
     var columns : Int = level+10 //10 is the border size, 5 on each side
     var rows : Int = level+10 //same as columns
@@ -50,7 +50,7 @@ class WorldGen {
         var rowNum: Int = 0
         var columnNum: Int = 0
         var imageType: Int = 0
-        init(rowNum: Int, columnNum: Int,imageType: Int)
+        init(rowNum: Int, columnNum: Int, imageType: Int)
         {
             self.rowNum = rowNum
             self.columnNum = columnNum
@@ -87,12 +87,12 @@ class WorldGen {
             {
                 if i <= 4 || i >= rows-5 || j <= 4 || j >= columns-5 //if it fits one of the cases, make 1
                 {
-                    someInts[i*columns + j] = 1 // i is the row the changed number is in. j is the columns number the changed number is in.
+                    // i is the row the changed number is in. j is the columns number the changed number is in.
                     blocks.blockList[i*columns + j].imageType = 1
                 }
             }
         }
-        
+        /*
         //creating alterations
         for var h = 0; h < horizontal; h++
         { //horizontal
@@ -190,7 +190,7 @@ class WorldGen {
                 someInts[(level+5)*columns + position+4] = 2
                 blocks.blockList[(level+5)*columns + position+4].imageType = 2
             }
-        }
+        }*/
 
 
         //generating floor
@@ -199,9 +199,34 @@ class WorldGen {
             for j in 0...columns-1
             {
                 //print("\(someInts[i*columns+j]) ")
+                //using (rows-1-i) prints the world in the orientation of the map on the phone
                 print("\(blocks.blockList[(rows-1-i)*columns+j].imageType) ")
             }
             println()
+        }
+    }
+    
+    func fillArea(startRow: Int, startColumn: Int, endRow: Int, endColumn: Int, toImage: Int) {
+        //go through columns and rows cooresponding to the inputs and fills it with toImage
+        for i in startRow...endRow {
+            for j in startColumn...endColumn {
+                blocks.blockList[(i*columns)+j].imageType = toImage
+            }
+        }
+    }
+    
+    func fillCircle(centerRow: Int, centerColumn: Int, radius: Double, toImage: Int) {
+        //go through entire map and checks to see if distance from tile to center is less than radius
+        var tileRadius = 0.00
+        var currentTile = blocks.blockList[0]
+        for i in 0...rows-1 {
+            for j in 0...columns-1 {
+                currentTile = blocks.blockList[(i*columns)+j]
+                tileRadius = sqrt(Double((currentTile.rowNum * currentTile.rowNum) + (currentTile.columnNum * currentTile.columnNum)))
+                if tileRadius < radius {
+                    blocks.blockList[(i*columns)+j].imageType = toImage
+                }
+            }
         }
     }
 }
