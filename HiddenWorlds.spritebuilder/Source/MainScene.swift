@@ -173,8 +173,8 @@ class MainScene: CCNode {
     
     func moveHero(x: CGFloat, y: CGFloat) {
         hero.position = ccp(hero.position.x + xMovement, hero.position.y + yMovement)
-        checkLocation()
         checkWalls()
+        checkLocation()
         checkExit()
     }
     
@@ -196,11 +196,22 @@ class MainScene: CCNode {
     }
     
     func checkLocation() {
-        if hero.position.y + camera.position.y > 240 || hero.position.y + camera.position.y < 80 {
-            camera.position = ccp(camera.position.x, camera.position.y - yMovement)
+        var distance : CGFloat = 0 //This moves hero to camera bounds
+        if hero.position.y + camera.position.y > 240 {
+            distance = hero.position.y + camera.position.y - 240 //distance from 240 bound
+            camera.position.y = camera.position.y - distance //moves hero DOWN to 240 bound
         }
-        if hero.position.x + camera.position.x > 488 || hero.position.x + camera.position.x < 80 {
-            camera.position = ccp(camera.position.x - xMovement, camera.position.y)
+        if hero.position.y + camera.position.y < 80 {
+            distance = hero.position.y + camera.position.y - 80 //distance from 80 bound
+            camera.position.y = camera.position.y - distance //moves hero UP to 80 bound
+        }
+        if hero.position.x + camera.position.x > 488 {
+            distance = hero.position.x + camera.position.x - 488
+            camera.position.x = camera.position.x - distance
+        }
+        if hero.position.x + camera.position.x < 80 {
+            distance = hero.position.x + camera.position.x - 80
+            camera.position.x = camera.position.x - distance
         }
     }
     
@@ -246,9 +257,9 @@ class MainScene: CCNode {
         }
         //wallSum checks which collision function to use
         var wallSum = blockOneWall + blockTwoWall + blockThreeWall + blockFourWall
-        /*
-        Output:
-        println("wallSum: \(wallSum)")
+        
+        //Output:
+        /*println("wallSum: \(wallSum)")
         println("blockOneWall: \(blockOneWall)")
         println("blockTwoWall: \(blockTwoWall)")
         println("blockThreeWall: \(blockThreeWall)")
@@ -293,12 +304,34 @@ class MainScene: CCNode {
                 if blockTwoWall == 1 { //if walls are on the same column, move the x position
                     hero.position.x = higherColumn * 16
                 }
+                else if blockThreeWall == 1 {
+                    if columnError < 0.5 {
+                        hero.position.x = lowerColumn * 16
+                        hero.position.y = higherRow * 16
+                    }
+                    else {
+                        hero.position.x = higherColumn * 16
+                        hero.position.y = lowerRow * 16
+                    }
+                }
                 else { //if walls are on the same row, move the y position
                     hero.position.y = higherRow * 16
                 }
             }
             else if blockTwoWall == 1 {
-                hero.position.y = lowerRow * 16
+                if blockThreeWall == 1 {
+                    hero.position.y = lowerRow * 16
+                }
+                else {
+                    if columnError < 0.5 {
+                        hero.position.x = lowerColumn * 16
+                        hero.position.y = lowerRow * 16
+                    }
+                    else {
+                        hero.position.x = higherColumn * 16
+                        hero.position.y = higherRow * 16
+                    }
+                }
             }
             else {
                 hero.position.x = lowerColumn * 16
@@ -334,7 +367,7 @@ class MainScene: CCNode {
         var xDifference = hero.position.x - exit.position.x
         var yDifference = hero.position.y - exit.position.y
         var fullDifference = sqrt(xDifference * xDifference + yDifference * yDifference)
-        if fullDifference < 8 {
+        if fullDifference < 16 {
             unloadTiles()
             levelGen.loadWorld()
             loadTiles()

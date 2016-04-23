@@ -67,6 +67,7 @@ class WorldGen {
     
     func loadWorld()
     {
+        var roomChance = arc4random_uniform(2)
         for i in 0...rows-1
         {
             for j in 0...columns-1
@@ -76,7 +77,19 @@ class WorldGen {
         }
         
         generateBorder(5)
-        generatePillars(10, ySpacing: 6, minRadius: 1, maxRadius: 3, buildChance: 80)
+        switch(roomChance) {
+        case 0:
+            generatePillars(10, ySpacing: 6, minRadius: 1, maxRadius: 3, buildChance: 80)
+            break;
+            
+        case 1:
+            generateMound(Int(arc4random_uniform(10))+30, yCenter: Int(arc4random_uniform(10))+30, maxRadius: 15, litterChance: 10)
+            break;
+            
+        default:
+            println("Something went wrong :(")
+            break;
+        }
         
         for items in 0...(level+10)*(level+10)
         {
@@ -222,13 +235,15 @@ class WorldGen {
         //go through entire map and checks to see if distance from tile to center is less than radius
         var tileRadius = 0.00
         var currentTile = blocks.blockList[0]
-        for i in 0...rows-1 {
-            for j in 0...columns-1 {
-                currentTile = blocks.blockList[(i*columns)+j]
-                tileRadius = sqrt(Double((currentTile.rowNum * currentTile.rowNum) + (currentTile.columnNum * currentTile.columnNum)))
-                if tileRadius < radius {
-                    blocks.blockList[(i*columns)+j].imageType = toImage
-                }
+        var columnDifference = 0
+        var rowDifference = 0
+        for tile in blocks.blockList {
+            columnDifference = tile.columnNum - centerColumn
+            rowDifference = tile.rowNum - centerRow
+            tileRadius = sqrt(Double(columnDifference * columnDifference) + Double(rowDifference * rowDifference))
+            //Output: println("Column: \(tile.columnNum) | Row: \(tile.rowNum) | Radius: \(tileRadius)")
+            if tileRadius < radius {
+                tile.imageType = toImage
             }
         }
     }
@@ -254,8 +269,24 @@ class WorldGen {
                 spawnChance = arc4random_uniform(100)
                 currentRadius = Int(arc4random_uniform(UInt32(radiusDifference))) + minRadius
                 if spawnChance < buildChance {
-                    fillArea((row*ySpacing)-currentRadius, startColumn: (column*xSpacing)-currentRadius, endRow: (row*ySpacing)+currentRadius, endColumn: (column*xSpacing)+currentRadius, toImage: 1)
+                    if row%2 == 1 {
+                        fillArea((row*ySpacing)-currentRadius, startColumn: (column*xSpacing)-currentRadius, endRow: (row*ySpacing)+currentRadius, endColumn: (column*xSpacing)+currentRadius, toImage: 1)
+                    }
+                    else {
+                        fillArea((row*ySpacing)-currentRadius, startColumn: (column*xSpacing)-currentRadius-(xSpacing/2), endRow: (row*ySpacing)+currentRadius, endColumn: (column*xSpacing)+currentRadius-(xSpacing/2), toImage: 1)
+                    }
                 }
+            }
+        }
+    }
+    
+    func generateMound(xCenter: Int, yCenter: Int, maxRadius: Double, litterChance: UInt32) {
+        var spawnChance = arc4random_uniform(100)
+        fillCircle(yCenter, centerColumn: xCenter, radius: maxRadius, toImage: 1)
+        for tile in blocks.blockList {
+            spawnChance = arc4random_uniform(100)
+            if spawnChance < litterChance {
+                tile.imageType = 1
             }
         }
     }
