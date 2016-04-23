@@ -367,7 +367,7 @@ class MainScene: CCNode {
         var xDifference = hero.position.x - exit.position.x
         var yDifference = hero.position.y - exit.position.y
         var fullDifference = sqrt(xDifference * xDifference + yDifference * yDifference)
-        if fullDifference < 16 {
+        if fullDifference < 4 {
             unloadTiles()
             levelGen.loadWorld()
             loadTiles()
